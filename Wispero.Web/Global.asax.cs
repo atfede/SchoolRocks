@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Wispero.Web.Binders;
+using Wispero.Web.Models;
 
 namespace Wispero.Web
 {
@@ -18,8 +20,7 @@ namespace Wispero.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             //TODO: Register your custom binder.
-            throw new NotImplementedException();
-            
+            ModelBinders.Binders.Add(typeof(QuestionAndAnswerModel), new QnAModelBinder());
         }
     }
 }

@@ -24,8 +24,15 @@ namespace Wispero.Data
         public void Add(KnowledgeBaseItem entity)
         {
             //TODO: Implement Adding mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
-            
+            try
+            {
+                this._context.KnowledgeBaseItems.Add(entity);
+                CommitChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public void CommitChanges()
@@ -36,37 +43,72 @@ namespace Wispero.Data
         public void Delete(int id)
         {
             //TODO: Implement Deleting mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
+            try
+            {
+                KnowledgeBaseItem item = this.Get(id);
+                if (item != null)
+                {
+                    this._context.KnowledgeBaseItems.Remove(item);
+                    CommitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public void Edit(KnowledgeBaseItem entity)
         {
-            //TODO: Implement Deleting mechanism for KnowledgeBaseItems.
+            //TODO: Implement Deleting mechanism for KnowledgeBaseItems. ??
             //This need to handle concurrency. As long as rowversions are the same then persist changes.
-            throw new NotImplementedException();
-           
+            var item = this._context.KnowledgeBaseItems.First(x => x.Id == entity.Id);
+
+            try
+            {
+                if (item.RowVersion == entity.RowVersion)
+                {
+                    this._context.KnowledgeBaseItems.Remove(item);
+                    CommitChanges();
+
+                    item.Query = entity.Query;
+                    item.Answer = entity.Answer;
+                    item.LastUpdateOn = entity.LastUpdateOn;
+                    item.Tags = entity.Tags;
+                    item.RowVersion = entity.RowVersion;
+
+                    this._context.KnowledgeBaseItems.Add(item);
+                    CommitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public KnowledgeBaseItem Get(int id)
         {
             //TODO: Implement Getting by Id mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
+            var item = this._context.KnowledgeBaseItems.FirstOrDefault(p => p.Id == id);
+            return item;
         }
 
         public List<KnowledgeBaseItem> GetAll()
         {
             //TODO: Implement Getting ALL mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
-            
+            var items = this._context.KnowledgeBaseItems.ToList();
+            return items;
         }
 
         public List<KnowledgeBaseItem> GetByFilter(Expression<Func<KnowledgeBaseItem, bool>> expression)
         {
             //TODO: Implement Getting by Filter mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
-            
-        }
+            var items = from p in this._context.KnowledgeBaseItems select p;
+            var filteredItems = items.Where(expression).ToList();
 
+            return filteredItems;
+        }
         #endregion
     }
 }

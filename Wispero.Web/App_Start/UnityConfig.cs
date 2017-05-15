@@ -5,6 +5,7 @@ using Wispero.Export.Settings;
 
 using Wispero.Core.Services;
 using Wispero.Core;
+using Wispero.Data;
 
 namespace Wispero.Web.App_Start
 {
@@ -40,7 +41,9 @@ namespace Wispero.Web.App_Start
             // container.LoadConfiguration();
 
             //TODO: Register your types for Dependency Injection
-            container.RegisterType <> (new PerRequestLifetimeManager());
+            //container.RegisterType<ApplicationDbContext>(new PerRequestLifetimeManager());
+            container.RegisterType<Core.Services.IDataService<Data.KnowledgeBaseData>>(new PerRequestLifetimeManager());
+            container.RegisterType<Core.Services.IQueryService<Data.KnowledgeBaseData>>(new PerRequestLifetimeManager());
 
         }
     }

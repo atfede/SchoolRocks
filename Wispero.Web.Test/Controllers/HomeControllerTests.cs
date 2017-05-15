@@ -93,6 +93,7 @@ namespace Wispero.Web.Test.Controllers
 
             var model = ((PartialViewResult)viewResult).Model as Models.QuestionAndAnswerModel;
 
+            //xx
             Assert.IsTrue(string.IsNullOrEmpty(model.Answer) && string.IsNullOrEmpty(model.Question) && string.IsNullOrEmpty(model.Tags));
         }
 

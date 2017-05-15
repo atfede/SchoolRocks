@@ -43,7 +43,8 @@ namespace Wispero.Web.Controllers
         public ActionResult Entry()
         {
             //TODO: Return partial view "Entry";
-            throw new NotImplementedException();
+
+            return PartialView();
             
         }
 
@@ -67,8 +68,28 @@ namespace Wispero.Web.Controllers
             //TODO: Return partial view "Entry" with an instance of QuestionAndAnswerModel.
             //If model is valid then persists the new entry on DB. Make sure  data changes are committed.
 
-            throw new NotImplementedException();
-            
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //QuestionAndAnswerModel qAA = AutoMapper.Mapper.Map<QuestionAndAnswerModel>(this.KnowledgeBaseQuery.Get(downCast.Id));
+
+                    KnowledgeBaseItem newItem = new KnowledgeBaseItem
+                    {
+                        Query = model.Question,
+                        Answer = model.Answer,
+                        LastUpdateOn = DateTime.Now,
+                        Tags = model.Tags
+                    };
+                    this.KnowledgeBaseData.Add(newItem);
+                    this.KnowledgeBaseData.CommitChanges();
+                }
+
+                return PartialView(model);
+            }
+            catch {
+                throw new Exception();
+            }
         }
     }
 }
